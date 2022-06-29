@@ -7,6 +7,9 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +23,7 @@ import com.psicoproject.domain.Client;
 import com.psicoproject.dto.ClientSaveDto;
 import com.psicoproject.model.PageModel;
 import com.psicoproject.model.PageRequestModel;
+import com.psicoproject.security.AccessManager;
 import com.psicoproject.service.ClientService;
 import com.psicoproject.service.UserService;
 
@@ -28,11 +32,9 @@ import com.psicoproject.service.UserService;
 public class ClientResource {
 	
 	@Autowired
-	UserService userService;
+	private ClientService clientService;
 	
-	@Autowired
-	ClientService clientService;
-	
+	@PreAuthorize("@accessManager.isNewClientUser(#clientDto)")
 	@PostMapping
 	public ResponseEntity<Client> save(@RequestBody @Valid ClientSaveDto clientDto){
 		Client client = clientDto.transformDto();
@@ -40,6 +42,7 @@ public class ClientResource {
 		return ResponseEntity.status(HttpStatus.CREATED).body(clientCreated);
 	}
 	
+	@PreAuthorize("@accessManager.isClientUser(#id)")
 	@PutMapping(value = "/{id}")
 	public ResponseEntity<Client> update(@PathVariable(value = "id") Long id, @RequestBody @Valid ClientSaveDto clientDto){
 		Client client = clientDto.transformDto();
@@ -51,12 +54,14 @@ public class ClientResource {
 		return ResponseEntity.ok(clientUpdate);
 	}
 	
+	@PreAuthorize("@accessManager.isClientUser(#id)")
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<Client> getById(@PathVariable(value = "id") Long id){
 		Client clientId = clientService.getById(id);
 		return ResponseEntity.ok(clientId);
 	}
 	
+	@Secured("ROLE_ADMINISTRATOR")
 	@GetMapping
 	public ResponseEntity<PageModel<Client>> listAll(@RequestParam(value = "page", defaultValue = "0") int page, @RequestParam(value = "size", defaultValue = "10")int size){
 		 PageRequestModel pr = new PageRequestModel(page, size);
