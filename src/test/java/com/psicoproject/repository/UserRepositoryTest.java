@@ -64,4 +64,6 @@ public class UserRepositoryTest {
 		int affectedRows = userRepository.updateRole(1L, Role.SIMPLE);
 		assertThat(affectedRows).isEqualTo(1);
 	}
+	
+	
 }
