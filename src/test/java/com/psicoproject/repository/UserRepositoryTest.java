@@ -2,68 +2,98 @@ package com.psicoproject.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.List;
 import java.util.Optional;
 
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.psicoproject.domain.User;
 import com.psicoproject.domain.enums.Role;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@TestMethodOrder(OrderAnnotation.class)
 @SpringBootTest
 public class UserRepositoryTest {
 
 	@Autowired
-	UserRepository userRepository;
+	private UserRepository userRepository;
 
-	@Test
-	public void saveTest() {
-		User user = new User(null, "Hebert", "1234567", "hebertwellington@gmail.com", Role.ADMINISTRATOR, null);
-		User userCreated = userRepository.save(user);
+	private Long list;
 
-		assertThat(userCreated.getId()).isEqualTo(1L);
+	private Long resultUpdate;
+
+	private User userNew;
+
+	@BeforeAll
+	public void setup() {
+		Long list = userRepository.count();
+		this.list = list;
 
 	}
 
 	@Test
-	public void updateUserTest() {
-		User user = new User(1L, "Hebert Barros", "1234567", "hebertwellington@gmail.com", Role.ADMINISTRATOR, null);
-		User userUpdate = userRepository.save(user);
-		
-		assertThat(userUpdate.getUsername()).isEqualTo("Hebert Barros");
- 	}
-	
+	@Order(1)
+	public void salvarNovoUsuarioNoBancoDeDados() {
+		User user = new User(null, "Test", "1234567", "test@gmail.com", Role.ADMINISTRATOR, null);
+		this.userNew = user;
+		User userCreated = userRepository.save(userNew);
+
+		assertThat(userCreated.getEmail()).isEqualTo("test@gmail.com");
+
+	}
+
 	@Test
-	public void getByIdUserTest() {
-		Optional<User> result = userRepository.findById(1L);
-		User user = result.get();
-		
+	@Order(2)
+	public void atualizarUsuarioNoBancoDeDados() {
+		Optional<User> result = userRepository.findByEmail("test@gmail.com");
+		this.resultUpdate = result.get().getId();
+		User userUp = new User(result.get().getId(), "TestUpdated", "1234567", "test@gmail.com", Role.ADMINISTRATOR, null);
+		User userUpdate = userRepository.save(userUp);
+
+		assertThat(userUpdate.getUsername()).isEqualTo("TestUpdated");
+	}
+
+	@Test
+	public void deveRetornarUsuarioPorIdDoBancoDeDados() {
+		Optional<User> resultId = userRepository.findById(resultUpdate);
+		User user = resultId.get();
+
 		assertThat(user.getPassword()).isEqualTo("1234567");
 	}
-	
+
 	@Test
-	public void listAllUserTest() {
-		List<User> list = userRepository.findAll();
+	public void deveRetornarListaUsuariosNoBancoDeDados() {
+		Long listUpdated = userRepository.count();
 		
-		assertThat(list.size()).isEqualTo(1);
-		
+		assertThat(listUpdated).isEqualTo(list + 1L);
 	}
-	
+
 	@Test
-	public void loginTest() {
-		Optional<User> result = userRepository.login("hebertwellington@gmail.com", "1234567");
-		User userLogin = result.get();
-		
-		assertThat(userLogin.getId()).isEqualTo(1L);
-		
+	public void deveRetornarUsuarioPorEmailSenhaDoBancoDeDados() {
+		Optional<User> resultLogin = userRepository.login("test@gmail.com", "1234567");
+		User userLogin = resultLogin.get();
+
+		assertThat(userLogin.getId()).isEqualTo(resultUpdate);
+
 	}
+
 	@Test
-	public void updateRoleTest() {
-		int affectedRows = userRepository.updateRole(1L, Role.SIMPLE);
+	public void deveRetornarUsuarioComRoleArtalizadoDoBancoDeDados() {
+		int affectedRows = userRepository.updateRole(resultUpdate, Role.SIMPLE);
+		
 		assertThat(affectedRows).isEqualTo(1);
 	}
-	
-	
+
+	@AfterAll
+	public void deleteRows() {
+		userRepository.deleteById(resultUpdate);
+	}
+
 }
