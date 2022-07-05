@@ -35,6 +35,7 @@ public class UserService implements UserDetailsService {
 		user.setPassword(hash);
 
 		User createdUser = userRepository.save(user);
+		
 		return createdUser;
 	}
 	
@@ -43,6 +44,7 @@ public class UserService implements UserDetailsService {
 		user.setPassword(hash);
 		
 		User updateUser = userRepository.save(user);
+		
 		return updateUser;
 	}
 	
