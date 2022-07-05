@@ -55,9 +55,6 @@ public class UserResource {
 	@Autowired
 	private JwtManager jwtManager;
 	
-	@Autowired
-	private AccessManager accessManager;
-	
 	@Secured("ROLE_ADMINISTRATOR")
 	@PostMapping
 	public ResponseEntity<User> save(@RequestBody @Valid UserSaveDto userDto){
