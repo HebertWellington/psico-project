@@ -1,7 +1,6 @@
 package com.psicoproject.resource;
 
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -34,7 +33,6 @@ import com.psicoproject.dto.UserUpdateDto;
 import com.psicoproject.dto.UserUpdateRoleDto;
 import com.psicoproject.model.PageModel;
 import com.psicoproject.model.PageRequestModel;
-import com.psicoproject.security.AccessManager;
 import com.psicoproject.security.JwtManager;
 import com.psicoproject.service.ClientService;
 import com.psicoproject.service.UserService;
