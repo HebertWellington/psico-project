@@ -10,7 +10,6 @@ import com.psicoproject.domain.Client;
 import com.psicoproject.domain.User;
 import com.psicoproject.dto.ClientSaveDto;
 import com.psicoproject.exception.NotFoundException;
-import com.psicoproject.model.PageModel;
 import com.psicoproject.repository.UserRepository;
 import com.psicoproject.service.ClientService;
 
