@@ -38,10 +38,10 @@ import com.psicoproject.repository.UserRepository;
 public class UserServiceTest {
 
 	@InjectMocks
-	UserService userService;
+	private UserService userService;
 
 	@Mock
-	UserRepository userRepository;
+	private UserRepository userRepository;
 
 	private User userNew;
 
