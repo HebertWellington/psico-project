@@ -18,6 +18,7 @@ Projeto de gerenciamento e automação administrativa de uma clínica de psicolo
 - `Funcionalidade 8`: Busca de registro de Clientes por id, restrito ao Usuário através do token.
 - `Funcionalidade 9`: Atualização de Roles, restrito ao Administrador.
 - `Funcionalidade 10`: Lista todos os registros dos Clientes com seus respectivos Usuários, restrito ao Administrador. Personalizada por quantidade de registros por página.
+- `Funcionalidade 11`: Testes de integração com o banco de dados e unitários nas camadas service e resource com Mockito.
 
 
 ## ✔️ Técnicas e tecnologias utilizadas
