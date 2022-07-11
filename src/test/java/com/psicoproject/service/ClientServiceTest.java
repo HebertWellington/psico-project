@@ -38,13 +38,13 @@ import com.psicoproject.repository.UserRepository;
 public class ClientServiceTest {
 
 	@InjectMocks
-	ClientService clientService;
+	private ClientService clientService;
 
 	@Mock
-	ClientRepository clientRepository;
+	private ClientRepository clientRepository;
 
 	@Mock
-	UserRepository userRepository;
+	private UserRepository userRepository;
 
 	private User user;
 
