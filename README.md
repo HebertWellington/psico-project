@@ -10,7 +10,7 @@ Projeto de gerenciamento e automação administrativa de uma clínica de psicolo
 
 - `Funcionalidade 1`: Login de Usuário retornando um token para autorizações futuras.
 - `Funcionalidade 2`: Registro de Usuários com autorização de Role @Secured.
-- `Funcionalidade 3`: Atualização de usuário reservado somente ao próprio via token, retrito ao usuário que contém o mesmo id @PreAuthorize.
+- `Funcionalidade 3`: Atualização de usuário reservado somente ao próprio via token, restrito ao usuário que contém o mesmo id @PreAuthorize.
 - `Funcionalidade 4`: Busca de Usuários por id, restrito ao Administrador do sistema.
 - `Funcionalidade 5`: Busca uma lista de Usuários personalizada por quantidade de registros por página.
 - `Funcionalidade 6`: Busca uma lista de Clientes de um Usuário, restrito ao Usuário. Personalizada por quantidade de registros por página.
